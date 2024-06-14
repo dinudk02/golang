@@ -1,0 +1,44 @@
+== To create a module in git use this command ==
+go mod init github.com/dinudk02/binarycode   "change the last path based on ur module ex "binarycode"
+===
+
+== To add module to ur project ==
+go mod tidy
+===
+
+== To build the project ==
+go build 
+===
+
+== To build and run the binarycode file use this for vs code terminal ==
+go build; if ($?) { ./binarycode }
+===
+
+== To create a git repo and push it ==
+git init
+
+===
+
+== package for getting port value to other files ==
+go get github.com/joho/godotenv
+
+1)To copy the code into vs code run the below commands in order 
+go mod vendor
+go mod tidy 
+go mod vendor
+
+hint: for every change to do in any file run build and binary file as given command 
+go build; if ($?) { ./binarycode } "the binarycode can be ur file name"
+===
+
+== For router we use chi ==
+go get -u github.com/go-chi/chi        
+go get -u github.com/go-chi/cors  "packages "
+
+hint is you installing any git code or package run this command 
+go mod vendor
+go mod tidy
+go mod vendor
+===
+
+
