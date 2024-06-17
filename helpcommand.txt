@@ -41,4 +41,33 @@ go mod tidy
 go mod vendor
 ===
 
+== After creating the [pstgresql and pg admin] ==
+create the new data base (if the icon is gold color then the server is running in your machine )
+===
+
+===After pg admin is running install this package in ur project in vs code ==
+SQLC
+go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+sqlc version
+
+Install Goose
+go install github.com/pressly/goose/v3/cmd/goose@latest
+goose -version  
+
+====
+
+=== create an table in ur new db using sql file in vscode ===
+1) create a directory path src/schema
+2) cd src/schema
+3) create this directory 
+mkdir migrations
+4) create a file in migrations directory with .sql extension
+New-Item -Path .\migrations\ -Name "202406171200_create_users_table.sql" -ItemType "file"
+5) write the sql code in the file
+6)And run this commands where change the username and password based on your db
+goose -dir ./migrations postgres "postgres://username:password@localhost:5432/rssagg?sslmode=disable" up
+7) now go and check the db-> schemas -> table 
+you can now see your new table with your field names and run this sql query
+SELECT * FROM users;    " to check it works good "
+   
 
