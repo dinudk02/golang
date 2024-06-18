@@ -71,3 +71,12 @@ you can now see your new table with your field names and run this sql query
 SELECT * FROM users;    " to check it works good "
    
 
+== database driver ==
+go get github.com/lib/pq
+go mod vendor
+go mod tidy
+go mod vendor
+===
+
+=== for uuid ===
+go get github.com/google/uuid
