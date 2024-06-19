@@ -1,40 +1,40 @@
 package main
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
-	"github.com/dinudk02/golang/internal/database" //  database link
-
+	"github.com/dinudk02/golang/internal/database"
 	"github.com/google/uuid"
 )
 
 func (apiCfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Request) {
+	log.Println("handlerCreateUser called")
 	type parameters struct {
-		Name  string `json:"name"`
-		Email string `json:"email"`
+		Name string `json:"name"`
 	}
 	decoder := json.NewDecoder(r.Body)
 	params := parameters{}
 	err := decoder.Decode(&params)
 	if err != nil {
-		respondWithError(w, 400, fmt.Sprintf("Error parsing JSON:%v", err))
+		respondWithErr(w, 400, fmt.Sprintf("Error parsing JSON: %v", err))
 		return
 	}
-	id := uuid.New()
+	log.Printf("Received parameters: %+v", params)
 	user, err := apiCfg.DB.CreateUser(r.Context(), database.CreateUserParams{
-		ID:        id,
-		Username:  params.Name,
-		CreatedAt: sql.NullTime{Time: time.Now().UTC(), Valid: true},
-		Email:     params.Email,
+		ID:        uuid.New(),
+		CreatedAt: time.Now().UTC(),
+		UpdatedAt: time.Now().UTC(),
+		Name:      params.Name,
 	})
 	if err != nil {
-		respondWithError(w, 400, fmt.Sprintf("coundt create user %v", err))
+		respondWithErr(w, 400, fmt.Sprintf("Couldn't create user: %v", err))
 		return
 	}
+	log.Printf("Created user: %+v", user)
 
 	respondWithJSON(w, 200, user)
 }

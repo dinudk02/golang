@@ -6,11 +6,11 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/dinudk02/golang/internal/database"
-
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
+
+	"github.com/dinudk02/golang/internal/database"
 
 	_ "github.com/lib/pq"
 )
