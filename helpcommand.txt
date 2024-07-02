@@ -80,3 +80,13 @@ go mod vendor
 
 === for uuid ===
 go get github.com/google/uuid
+
+===
+
+== for api call use gin framework ==
+go get github.com/gin-gonic/gin
+go mod vendor
+go mod tidy
+go mod vendor
+===
+

@@ -1,71 +1,69 @@
 package main
 
 import (
-	"database/sql"
-	"log"
+	"errors"
 	"net/http"
-	"os"
 
-	"github.com/go-chi/chi"
-	"github.com/go-chi/cors"
-	"github.com/joho/godotenv"
-
-	"github.com/dinudk02/golang/internal/database"
-
-	_ "github.com/lib/pq"
+	"github.com/gin-gonic/gin"
 )
 
-type apiConfig struct {
-	DB *database.Queries
+type book struct {
+	ID       string `json:"id"`
+	Title    string `json:"title"`
+	Author   string `json:"author"`
+	Quantity int    `json:"quantity"`
 }
 
-func main() {
-	godotenv.Load(".env")
+var books = []book{
+	{ID: "1", Title: "In Search of Lost Time", Author: "Marcel Proust", Quantity: 2},
+	{ID: "2", Title: "The Great Gatsby", Author: "F. Scott Fitzgerald", Quantity: 5},
+	{ID: "3", Title: "War and Peace", Author: "Leo Tolstoy", Quantity: 6},
+}
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		log.Fatal("PORT environment variable is not set")
+func getBooks(c *gin.Context) {
+	c.IndentedJSON(http.StatusOK, books)
+}
+
+func createBook(c *gin.Context) {
+	var newBook book
+	if err := c.BindJSON(&newBook); err != nil {
+		return
 	}
+	books = append(books, newBook)
+	c.IndentedJSON(http.StatusCreated, newBook)
+}
 
-	dbURL := os.Getenv("DATABASE_URL")
-	if dbURL == "" {
-		log.Fatal("DATABASE_URL environment variable is not set")
-	}
-
-	db, err := sql.Open("postgres", dbURL)
+func bookById(c *gin.Context) {
+	id := c.Param("id")
+	book, err := getBookById(id)
 	if err != nil {
-		log.Fatal(err)
+		return
 	}
-	dbQueries := database.New(db)
-
-	apiCfg := apiConfig{
-		DB: dbQueries,
-	}
-
-	router := chi.NewRouter()
-
-	router.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{"https://*", "http://*"},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"*"},
-		ExposedHeaders:   []string{"Link"},
-		AllowCredentials: false,
-		MaxAge:           300,
-	}))
-
-	v1Router := chi.NewRouter()
-
-	v1Router.Post("/users", apiCfg.handlerCreateUser)
-
-	v1Router.Get("/healthz", handlerReadiness)
-	v1Router.Get("/err", handlerErr)
-
-	router.Mount("/v1", v1Router)
-	srv := &http.Server{
-		Addr:    ":" + port,
-		Handler: router,
-	}
-
-	log.Printf("Serving on port: %s\n", port)
-	log.Fatal(srv.ListenAndServe())
+	c.IndentedJSON(http.StatusOK, book)
 }
+
+func getBookById(id string) (*book, error) {
+	for i, b := range books {
+		if b.ID == id {
+			return &books[i], nil
+		}
+
+	}
+	return nil, errors.New("books not found")
+
+}
+func main() {
+	r := gin.Default()
+	r.GET("/books", getBooks)
+	r.POST("/books", createBook)
+	r.GET("/books/:id", bookById)
+	r.Run("localhost:8080")
+}
+
+// for post call data to be  send in the thinder client
+// {
+// 	"id":"2",
+// 	"title":"dinesh",
+// 	"author":"rethi",
+// 	"quantity":2
+//   }
