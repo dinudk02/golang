@@ -1,8 +1,0 @@
-version: "2"
-sql:
-  - schema: "sql/schema/migrations/202406171200_create_users_table.sql"
-    queries: "sql/queries/users.sql"
-    engine: "postgresql"
-    gen:
-      go:
-        out: "internal/database"
