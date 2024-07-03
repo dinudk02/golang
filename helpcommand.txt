@@ -89,14 +89,14 @@ go mod vendor
 go mod tidy
 go mod vendor
 ===
-
+=======================================================
 == api call using db == the below are steps
 
 == when ever there is a change it auto rebuild and runs it by using daemon==
 https://github.com/sevlyar/go-daemon
 
-go get github.com/sevlyar/go-daemon
-go install github.com/sevlyar/go-daemon
+go get github.com/githubnemo/CompileDaemon
+go install github.com/githubnemo/CompileDaemon
 ==
 
 == to load the env varibale easily install this ==
@@ -107,6 +107,8 @@ go install github.com/joho/godotenv
 ==
 
 == for api call use gin framework ==
+https://gin-gonic.com/docs/quickstart/
+
 go get github.com/gin-gonic/gin
 go mod vendor
 go mod tidy
@@ -124,3 +126,4 @@ go get -u gorm.io/driver/postgres
 == to run this configuration use this ==
 CompileDaemon -command="./golang"
 
+=============================================================
