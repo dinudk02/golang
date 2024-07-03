@@ -125,5 +125,9 @@ go get -u gorm.io/driver/postgres
 
 == to run this configuration use this ==
 CompileDaemon -command="./golang"
+==
+
+== now we are using db => elephantsql==
+
 
 =============================================================
