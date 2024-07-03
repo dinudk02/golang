@@ -107,7 +107,7 @@ func main() {
 
 // for post call data to be  send in the thinder client
 // {
-// 	"id":"2",
+// 	"id":"4",
 // 	"title":"dinesh",
 // 	"author":"rethi",
 // 	"quantity":2
