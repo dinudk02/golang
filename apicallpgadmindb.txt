@@ -1,0 +1,138 @@
+package main
+
+import (
+	"database/sql"
+	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
+	_ "github.com/lib/pq"
+)
+
+const (
+	host     = "localhost"
+	port     = 5432
+	user     = "myuser"     // Replace with your PostgreSQL username
+	password = "mypassword" // Replace with your PostgreSQL password
+	dbname   = "mydatabase" // Replace with your PostgreSQL database name
+)
+
+var db *sql.DB
+
+type Book struct {
+	ID        int    `json:"id"`
+	Name      string `json:"name"`
+	Quantity  int    `json:"quantity"`
+	Publish   string `json:"publish"`
+	Available bool   `json:"available"`
+}
+
+func main() {
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+		host, port, user, password, dbname)
+
+	var err error
+	db, err = sql.Open("postgres", psqlInfo)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	err = db.Ping()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Successfully connected!")
+
+	createTableSQL := `
+  CREATE TABLE IF NOT EXISTS books (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    quantity INT NOT NULL,
+    publish DATE,
+    available BOOLEAN DEFAULT TRUE
+  );`
+
+	_, err = db.Exec(createTableSQL)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Table created successfully!")
+
+	router := mux.NewRouter()
+	router.HandleFunc("/books", createBook).Methods("POST")
+	router.HandleFunc("/books/{id}", getBookByID).Methods("GET")
+	router.HandleFunc("/books/takeout/{id}", takeBookOut).Methods("POST")
+
+	log.Fatal(http.ListenAndServe(":8000", router))
+}
+
+func createBook(w http.ResponseWriter, r *http.Request) {
+	var books []Book
+	err := json.NewDecoder(r.Body).Decode(&books)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	for _, book := range books {
+		sqlStatement := `INSERT INTO books (name, quantity, publish, available) VALUES ($1, $2, $3, $4)`
+		_, err = db.Exec(sqlStatement, book.Name, book.Quantity, book.Publish, book.Available)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+
+	w.WriteHeader(http.StatusCreated)
+}
+
+func getBookByID(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	var book Book
+	sqlStatement := `SELECT id, name, quantity, publish, available FROM books WHERE id=$1`
+	row := db.QueryRow(sqlStatement, id)
+	err = row.Scan(&book.ID, &book.Name, &book.Quantity, &book.Publish, &book.Available)
+	if err == sql.ErrNoRows {
+		http.Error(w, "Book not found", http.StatusNotFound)
+		return
+	} else if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(book)
+}
+
+func takeBookOut(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	sqlStatement := `UPDATE books SET available=FALSE WHERE id=$1 AND available=TRUE RETURNING id`
+	var updatedID int
+	err = db.QueryRow(sqlStatement, id).Scan(&updatedID)
+	if err == sql.ErrNoRows {
+		http.Error(w, "Book not available or not found", http.StatusNotFound)
+		return
+	} else if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}

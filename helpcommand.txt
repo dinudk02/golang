@@ -131,3 +131,8 @@ CompileDaemon -command="./golang"
 
 
 =============================================================
+
+
+== for websocket need gorilla ==
+go get github.com/gorilla/websocket
+==
