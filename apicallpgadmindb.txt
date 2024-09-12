@@ -15,9 +15,9 @@ import (
 const (
 	host     = "localhost"
 	port     = 5432
-	user     = "myuser"     // Replace with your PostgreSQL username
-	password = "mypassword" // Replace with your PostgreSQL password
-	dbname   = "mydatabase" // Replace with your PostgreSQL database name
+	user     = "myuser"     // PostgreSQL username
+	password = "mypassword" //  PostgreSQL password
+	dbname   = "mydatabase" // PostgreSQL database name
 )
 
 var db *sql.DB

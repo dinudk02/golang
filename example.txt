@@ -1,0 +1,541 @@
+Here are simple and easy-to-understand Go examples for each of the topics you're learning:
+
+1. Variables
+go
+Copy code
+package main
+import "fmt"
+
+func main() {
+    var x int = 10
+    y := 20  // shorthand declaration
+    fmt.Println(x, y)
+}
+2. Conditionals
+go
+Copy code
+package main
+import "fmt"
+
+func main() {
+    age := 18
+    if age >= 18 {
+        fmt.Println("You are an adult.")
+    } else {
+        fmt.Println("You are a minor.")
+    }
+}
+3. Functions
+go
+Copy code
+package main
+import "fmt"
+
+func add(a int, b int) int {
+    return a + b
+}
+
+func main() {
+    result := add(5, 3)
+    fmt.Println(result)
+}
+4. Structs
+go
+Copy code
+package main
+import "fmt"
+
+type Person struct {
+    Name string
+    Age  int
+}
+
+func main() {
+    person := Person{Name: "Alice", Age: 25}
+    fmt.Println(person.Name, person.Age)
+}
+5. Interfaces
+go
+Copy code
+package main
+import "fmt"
+
+type Speaker interface {
+    Speak() string
+}
+
+type Dog struct{}
+
+func (d Dog) Speak() string {
+    return "Woof!"
+}
+
+func main() {
+    var speaker Speaker = Dog{}
+    fmt.Println(speaker.Speak())
+}
+6. Errors
+go
+Copy code
+package main
+import (
+    "errors"
+    "fmt"
+)
+
+func divide(a, b int) (int, error) {
+    if b == 0 {
+        return 0, errors.New("division by zero")
+    }
+    return a / b, nil
+}
+
+func main() {
+    result, err := divide(4, 0)
+    if err != nil {
+        fmt.Println("Error:", err)
+    } else {
+        fmt.Println("Result:", result)
+    }
+}
+7. Loops
+go
+Copy code
+package main
+import "fmt"
+
+func main() {
+    for i := 1; i <= 5; i++ {
+        fmt.Println(i)
+    }
+}
+8. Slices
+go
+Copy code
+package main
+import "fmt"
+
+func main() {
+    numbers := []int{1, 2, 3, 4, 5}
+    fmt.Println(numbers)
+}
+9. Maps
+go
+Copy code
+package main
+import "fmt"
+
+func main() {
+    capitals := map[string]string{"France": "Paris", "Japan": "Tokyo"}
+    fmt.Println(capitals["France"])
+}
+10. Pointers
+go
+Copy code
+package main
+import "fmt"
+
+func main() {
+    x := 10
+    y := &x  // pointer to x
+    *y = 20  // dereferencing the pointer
+    fmt.Println(x)  // prints 20
+}
+11. Packages and Modules
+Creating a package:
+go
+Copy code
+// greet.go (in "greet" package folder)
+package greet
+
+func Hello() string {
+    return "Hello, World!"
+}
+Using the package:
+go
+Copy code
+// main.go
+package main
+import (
+    "fmt"
+    "greet"  // assuming you structured it as a module
+)
+
+func main() {
+    fmt.Println(greet.Hello())
+}
+12. Channels
+go
+Copy code
+package main
+import "fmt"
+
+func main() {
+    messages := make(chan string)
+
+    go func() {
+        messages <- "Hello from goroutine"
+    }()
+
+    msg := <-messages
+    fmt.Println(msg)
+}
+13. Mutexes
+go
+Copy code
+package main
+import (
+    "fmt"
+    "sync"
+)
+
+var counter int
+var mutex sync.Mutex
+
+func increment(wg *sync.WaitGroup) {
+    mutex.Lock()
+    counter++
+    mutex.Unlock()
+    wg.Done()
+}
+
+func main() {
+    var wg sync.WaitGroup
+    for i := 0; i < 5; i++ {
+        wg.Add(1)
+        go increment(&wg)
+    }
+    wg.Wait()
+    fmt.Println("Counter:", counter)
+}
+14. Generics (Go 1.18+)
+go
+Copy code
+package main
+import "fmt"
+
+func Print[T any](input T) {
+    fmt.Println(input)
+}
+
+func main() {
+    Print(123)
+    Print("Generics in Go")
+}
+15. Enums (iota)
+go
+Copy code
+package main
+import "fmt"
+
+type Day int
+
+const (
+    Sunday Day = iota
+    Monday
+    Tuesday
+    Wednesday
+    Thursday
+    Friday
+    Saturday
+)
+
+func main() {
+    fmt.Println(Sunday, Monday, Friday)
+}
+
+
+
+
+
+==================
+
+
+1. Variables
+Scenario: Store and print the total price in a shopping cart
+
+go
+Copy code
+package main
+import "fmt"
+
+func main() {
+    var itemPrice float64 = 49.99
+    quantity := 3
+    totalPrice := itemPrice * float64(quantity)
+    fmt.Printf("Total Price: $%.2f\n", totalPrice)
+}
+2. Conditionals
+Scenario: Check if a user is eligible for a discount based on age
+
+go
+Copy code
+package main
+import "fmt"
+
+func main() {
+    age := 65
+    if age >= 65 {
+        fmt.Println("Eligible for senior citizen discount.")
+    } else if age >= 18 {
+        fmt.Println("Eligible for regular discount.")
+    } else {
+        fmt.Println("Not eligible for discount.")
+    }
+}
+3. Functions
+Scenario: Calculate the area of a rectangle
+
+go
+Copy code
+package main
+import "fmt"
+
+func calculateArea(length, width float64) float64 {
+    return length * width
+}
+
+func main() {
+    area := calculateArea(5.0, 3.2)
+    fmt.Printf("Area of the rectangle: %.2f\n", area)
+}
+4. Structs
+Scenario: Model an employee record
+
+go
+Copy code
+package main
+import "fmt"
+
+type Employee struct {
+    ID     int
+    Name   string
+    Salary float64
+}
+
+func main() {
+    emp := Employee{ID: 101, Name: "John", Salary: 50000}
+    fmt.Printf("Employee: %+v\n", emp)
+}
+5. Interfaces
+Scenario: Define a payment method interface
+
+go
+Copy code
+package main
+import "fmt"
+
+type PaymentMethod interface {
+    Pay(amount float64) string
+}
+
+type CreditCard struct{}
+
+func (cc CreditCard) Pay(amount float64) string {
+    return fmt.Sprintf("Paid %.2f using Credit Card.", amount)
+}
+
+func main() {
+    var payment PaymentMethod = CreditCard{}
+    fmt.Println(payment.Pay(100.0))
+}
+6. Errors
+Scenario: Check for an error when opening a file
+
+go
+Copy code
+package main
+import (
+    "fmt"
+    "os"
+)
+
+func main() {
+    _, err := os.Open("nonexistent.txt")
+    if err != nil {
+        fmt.Println("Error opening file:", err)
+    }
+}
+7. Loops
+Scenario: Sum the prices in a shopping cart
+
+go
+Copy code
+package main
+import "fmt"
+
+func main() {
+    prices := []float64{29.99, 9.99, 4.99}
+    total := 0.0
+    for _, price := range prices {
+        total += price
+    }
+    fmt.Printf("Total: $%.2f\n", total)
+}
+8. Slices
+Scenario: Store and print a list of products
+
+go
+Copy code
+package main
+import "fmt"
+
+func main() {
+    products := []string{"Laptop", "Smartphone", "Tablet"}
+    fmt.Println("Available Products:", products)
+}
+9. Maps
+Scenario: Store and retrieve user information
+
+go
+Copy code
+package main
+import "fmt"
+
+func main() {
+    userInfo := map[string]string{
+        "username": "johndoe",
+        "email":    "johndoe@example.com",
+    }
+    fmt.Println("User Email:", userInfo["email"])
+}
+10. Pointers
+Scenario: Modify user balance using a pointer
+
+go
+Copy code
+package main
+import "fmt"
+
+func updateBalance(balance *float64, amount float64) {
+    *balance += amount
+}
+
+func main() {
+    balance := 100.0
+    updateBalance(&balance, 50.0)
+    fmt.Printf("Updated Balance: $%.2f\n", balance)
+}
+11. Packages and Modules
+Scenario: A package for math operations
+
+mathutils.go (inside "mathutils" folder)
+go
+Copy code
+package mathutils
+
+func Add(a, b int) int {
+    return a + b
+}
+Using the package in the main program:
+go
+Copy code
+package main
+import (
+    "fmt"
+    "mathutils"
+)
+
+func main() {
+    result := mathutils.Add(5, 10)
+    fmt.Println("Sum:", result)
+}
+12. Channels
+Scenario: Sending stock prices between goroutines
+
+go
+Copy code
+package main
+import (
+    "fmt"
+    "time"
+)
+
+func main() {
+    prices := make(chan float64)
+
+    go func() {
+        time.Sleep(2 * time.Second)
+        prices <- 105.25  // send stock price
+    }()
+
+    fmt.Println("Fetching stock price...")
+    price := <-prices  // receive stock price
+    fmt.Printf("Stock Price: $%.2f\n", price)
+}
+13. Mutexes
+Scenario: Safely update a shared counter across multiple goroutines
+
+go
+Copy code
+package main
+import (
+    "fmt"
+    "sync"
+)
+
+var counter int
+var mutex sync.Mutex
+
+func increment(wg *sync.WaitGroup) {
+    mutex.Lock()
+    counter++
+    mutex.Unlock()
+    wg.Done()
+}
+
+func main() {
+    var wg sync.WaitGroup
+    for i := 0; i < 5; i++ {
+        wg.Add(1)
+        go increment(&wg)
+    }
+    wg.Wait()
+    fmt.Println("Final Counter:", counter)
+}
+14. Generics (Go 1.18+)
+Scenario: A generic function to find the maximum of two values
+
+go
+Copy code
+package main
+import "fmt"
+
+func Max[T comparable](a, b T) T {
+    if a > b {
+        return a
+    }
+    return b
+}
+
+func main() {
+    fmt.Println(Max(3, 5))      // with integers
+    fmt.Println(Max(3.5, 2.1))  // with floats
+}
+15. Enums (using iota)
+Scenario: Represent different user roles using enums
+
+go
+Copy code
+package main
+import "fmt"
+
+type UserRole int
+
+const (
+    Admin UserRole = iota
+    Editor
+    Viewer
+)
+
+func main() {
+    role := Admin
+    switch role {
+    case Admin:
+        fmt.Println("User is an Admin.")
+    case Editor:
+        fmt.Println("User is an Editor.")
+    case Viewer:
+        fmt.Println("User is a Viewer.")
+    }
+}

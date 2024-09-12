@@ -1,0 +1,110 @@
+go is statically typed and compiled
+
+why go ??
+
+1. fast and light weight 
+2. easily concurrent
+3. easy and simple
+4. compiled
+5.statically typed 
+6.garbage collected
+
+====
+
+Go program structure
+We'll go over this all later in more detail, but to sate your curiosity:
+
+package main lets the Go compiler know that we want this code to compile and run as a standalone program, as opposed to being a library that's imported by other programs.
+import "fmt" imports the fmt (formatting) package from the standard library. It allows us to use fmt.Println to print to the console.
+func main() defines the main function, the entry point for a Go program.
+Two kinds of bugs
+Generally speaking, there are two kinds of errors in programming:
+
+Compilation errors. Occur when code is compiled. It's generally better to have compilation errors because they'll never accidentally make it into production. You can't ship a program with a compiler error because the resulting executable won't even be created.
+Runtime errors. Occur when a program is running. These are generally worse because they can cause your program to crash or behave unexpectedly.
+===
+
+Type Sizes
+Integers, uints, floats, and complex numbers all have type sizes.
+
+Whole Numbers (no decimal)
+int  int8  int16  int32  int64
+
+
+Positive Whole Numbers (no decimal)
+"uint" stands for "unsigned integer".
+
+uint uint8 uint16 uint32 uint64 uintptr
+
+Signed Decimal Numbers
+float32 float64
+
+Imaginary Numbers (rarely used)
+complex64 complex128
+===
+
+
+Key Strengths of Go:
+Simplicity:
+
+Go’s syntax is clean, minimalistic, and easy to understand. It avoids many of the complexities found in other languages such as inheritance, method overloading, or annotations.
+This simplicity leads to faster learning and development, which is particularly beneficial for teams and projects where rapid iteration and scaling are essential.
+Concurrency:
+
+Go has built-in support for concurrency through goroutines and channels. It uses the CSP (Communicating Sequential Processes) model to allow concurrent execution of tasks in a highly efficient way.
+Goroutines are lightweight and consume much fewer resources than threads in languages like Java, making Go ideal for building scalable systems like web servers, microservices, and real-time applications.
+Performance:
+
+Go compiles down to machine code, leading to highly optimized and fast execution times, comparable to C/C++.
+It provides automatic memory management (garbage collection) but does so efficiently, making it a good balance between ease of use and performance.
+Compilation Speed:
+
+Go has a very fast compiler, allowing for quick iterations during the development cycle. The entire codebase compiles to a single executable, reducing dependency complexity and deployment time.
+Cross-Platform:
+
+Go is designed to be platform-independent, allowing you to build cross-platform applications without much hassle. The same code can be compiled for different operating systems like Windows, macOS, and Linux easily.
+Built-in Tools:
+
+Go comes with a rich set of tools for formatting, testing, building, and profiling code (gofmt, go test, etc.). This fosters consistency and helps developers maintain a high-quality codebase.
+Strong Ecosystem:
+
+Go has strong libraries for networking, web development, and cloud-native applications (e.g., Docker and Kubernetes are written in Go). It’s commonly used in microservice architectures and cloud infrastructure.
+Static Typing with Ease:
+
+Go offers static typing (compile-time checks) with the ease of a dynamically typed language. This helps catch errors early in the development process, enhancing code reliability and maintainability.
+Memory Management:
+
+While Go uses garbage collection, it allows for more fine-grained control over memory management (e.g., through pointers), which can result in better performance compared to high-level languages like Python or Java.
+
+
+==
+
+Why Use Go Over Other Languages:
+Concurrency Support:
+
+In languages like Java or C++, managing concurrency is often more complex and error-prone (e.g., dealing with threads and locks). Go’s goroutines are simpler, more efficient, and scalable, making Go a natural choice for concurrent applications.
+Ease of Development:
+
+Compared to OOP languages where design patterns and hierarchies can become over-complicated, Go’s simplicity promotes writing clear and straightforward code. This reduces complexity, which is critical for maintainability, especially in large-scale systems.
+Fast and Scalable Microservices:
+
+Go’s speed, concurrency model, and small memory footprint make it a great choice for building microservices or cloud-native applications. Languages like Java require more resources to achieve the same level of scalability.
+DevOps and Cloud-Native:
+
+Go is heavily used in modern cloud environments and DevOps tools. Technologies like Docker, Kubernetes, and Terraform are written in Go, making it the go-to language for cloud infrastructure and automation.
+No Legacy Baggage:
+
+Go is a modern language built from the ground up, meaning it doesn’t carry the legacy features and baggage that languages like Java or C++ do. This helps avoid overengineering solutions.
+===
+
+
+When to Choose Go:
+If you're building highly scalable web services or microservices.
+When you need high-performance applications but want to avoid the complexity of languages like C++.
+For applications with high concurrency needs, such as real-time systems, servers, or cloud-native apps.
+In situations where developer productivity and a fast learning curve are crucial.
+For building command-line tools or DevOps-related applications.
+When Not to Use Go:
+If you need deep OOP features like inheritance, or are building applications that rely heavily on traditional OOP paradigms.
+For front-end development (Go is not designed for front-end frameworks or UI applications).
+If your application requires extensive third-party libraries that aren’t yet available in Go (though its ecosystem is rapidly growing).
